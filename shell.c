@@ -8,9 +8,11 @@
 
 int	main(void)
 {
-	char	**args = NULL, *user_input = NULL;
-	char	*token;
-	int	r_getline, size_alloc = 0;
+	char **args = NULL, *user_input = NULL;
+	char *token;
+	size_t size_alloc = 0;
+	int i, r_getline;
+	pid_t pid;
 
 	while (1)
 	{
@@ -35,11 +37,37 @@ int	main(void)
 		}
 		token = strtok(user_input, " ");
 		i = 0;
-		while (token != '\0')
+		while (token != NULL)
 		{
 			args[i++] = token;
 			token = strtok(NULL, " ");
 		}
 		args[i] = '\0';
+		if (args[0] != NULL)
+		{
+			pid = fork();
+			if (pid == -1)
+			{
+				perror("fork error");
+				exit(EXIT_FAILURE);
+			}
+			if (pid == 0)
+			{
+				if (execvp(args[0], args) == -1)
+				{
+					perror("execvp error");
+					exit(EXIT_FAILURE);
+				}
+			}
+			else
+			{
+				int status;
+
+				waitpid(pid, &status, 0);
+			}
+		}
+		free(args);
 	}
+	free(user_input);
+	return (0);
 }
