@@ -11,6 +11,7 @@ char *read_line(void)
 	size_t bufsize = 0;
 	pid_t pid;
 	int status;
+	char **args = NULL;
 
 	while (1)
 	{
@@ -37,7 +38,6 @@ char *read_line(void)
 	pid = fork();
 	if (pid ==  0)
 	{
-		char *args[] = {line, NULL};
 	if (execvp(args[0], args) == -1)
 	{
 		perror("error in new_process: child process");
@@ -56,6 +56,5 @@ char *read_line(void)
 		}
 		while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
-	free(line);
-	return (0);
+	return (line);
 }
