@@ -12,30 +12,37 @@ char *read_line(void)
 	pid_t pid;
 	int status;
 
-	if (getline(&line, &bufsize, stdin) == -1)
+	while (1)
 	{
-		if (feof(stdin))
+		if (isatty(STDIN_FILENO) == 1)
 		{
-			free(line);
-			exit(EXIT_SUCCESS);
+			printf("($) ");
+			fflush(stdin);
 		}
-		else
+		else if (getline(&line, &bufsize, stdin) == -1)
 		{
-			free(line);
-			perror("error while reading the line from stdin");
-			exit(EXIT_FAILURE);
+			if (feof(stdin))
+			{
+				free(line);
+				exit(EXIT_SUCCESS);
+			}
+			else
+			{
+				free(line);
+				perror("error while reading the line from stdin");
+				exit(EXIT_FAILURE);
+			}
 		}
 	}
 	pid = fork();
 	if (pid ==  0)
 	{
 		char *args[] = {line, NULL};
+	if (execvp(args[0], args) == -1)
+	{
+		perror("error in new_process: child process");
 	}
-		if (execvp(args[0], args) == -1)
-		{
-			perror("error in new_process: child process");
-		}
-		exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 	}
 	else if (pid < 0)
 	{
@@ -43,9 +50,11 @@ char *read_line(void)
 	}
 	else
 	{
-		do {
+		do 
+		{
 			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		}
+		while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 	free(line);
 	return (0);
