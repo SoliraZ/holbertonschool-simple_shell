@@ -17,6 +17,7 @@ int	main(void)
 		print_prompt();
 		user_input = read_line();
 		args = tokenize(user_input);
+		exit_func(args, user_input);
 		if (args[0] != NULL)
 		{
 			pid = fork();
