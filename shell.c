@@ -1,48 +1,81 @@
 #include "shell.h"
 
 /**
- * main - Simple shell main function.
+ * print_prompt - prints prompt
+ */
+
+void	print_prompt(void)
+{
+	if (isatty(STDIN_FILENO) == 1)
+	{
+		printf("($) ");
+		fflush(stdin);
+	}
+}
+/**
+ * tokenize - tokenizes user input
+ * @user_input: user input
  *
- * Return: 0 on sucess and 1 on error.
+ * Return: tokenized user input
+ */
+
+char	**tokenize(char *user_input)
+{
+	char **args = NULL;
+	char *token;
+	int i = 0;
+
+	args = malloc(sizeof(char *) * 64);
+	if (args == NULL)
+	{
+		perror("malloc error");
+		exit(EXIT_FAILURE);
+	}
+	token = strtok(user_input, " ");
+	while (token != NULL)
+	{
+		args[i++] = token;
+		token = strtok(NULL, " ");
+	}
+	args[i] = '\0';
+	return (args);
+}
+/**
+ * read_line - reads a line from stdin
+ *
+ * Return: user input
+ */
+
+char	*read_line(void)
+{
+	char *user_input = NULL;
+	size_t size_alloc = 0;
+
+	if (getline(&user_input, &size_alloc, stdin) == -1)
+	{
+		perror("getline error");
+		exit(EXIT_FAILURE);
+	}
+	user_input[strcspn(user_input, "\n")] = '\0';
+	return (user_input);
+}
+/**
+ * main - entry point
+ *
+ * Return: 0 on success, 1 on failure
  */
 
 int	main(void)
 {
-	char **args = NULL, *user_input = NULL;
-	char *token;
-	size_t size_alloc = 0;
-	int i, r_getline;
+	char **args = NULL;
+	char *user_input = NULL;
 	pid_t pid;
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO) == 1)
-		{
-			printf("($) ");
-			fflush(stdin);
-		}
-		r_getline = getline(&user_input, &size_alloc, stdin);
-		if (r_getline == -1)
-		{
-			free(user_input);
-			perror("getline error");
-			exit(EXIT_FAILURE);
-		}
-		user_input[strcspn(user_input, "\n")] = '\0';
-		args = malloc(sizeof(char *) * 64);
-		if (args == NULL)
-		{
-			perror("malloc error");
-			exit(EXIT_FAILURE);
-		}
-		token = strtok(user_input, " ");
-		i = 0;
-		while (token != NULL)
-		{
-			args[i++] = token;
-			token = strtok(NULL, " ");
-		}
-		args[i] = '\0';
+		print_prompt();
+		user_input = read_line();
+		args = tokenize(user_input);
 		if (args[0] != NULL)
 		{
 			pid = fork();
