@@ -10,4 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+void print_prompt(void);
+char **tokenize(char *user_input);
+char *read_line(void);
+
 #endif
