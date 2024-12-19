@@ -29,7 +29,7 @@ int	main(void)
 			{
 				if (execvp(args[0], args) == -1)
 				{
-					perror("execvp error");
+					fprintf(stderr, "./hsh: command not found: %s\n", args[0]);
 					exit(EXIT_FAILURE);
 				}
 			}
