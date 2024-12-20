@@ -16,9 +16,10 @@ int main(void)
 		print_prompt();
 		user_input = read_line();
 		args = tokenize(user_input);
-		exit_func(args, user_input);
-
-		if (args[0] != NULL && strcmp(args[0], "env") != 0)
+		if (args[0] != NULL && (strcmp(args[0], "exit") == 0
+					|| strcmp(args[0], "env") == 0 || strcmp(args[0], "test") == 0))
+			command(args, user_input);
+		else
 		{
 			pid = fork();
 			if (pid == -1)
@@ -26,7 +27,7 @@ int main(void)
 				perror("fork error");
 				exit(EXIT_FAILURE);
 			}
-			if (pid == 0)
+			else if (pid == 0)
 			{
 				if (execve(args[0], args, environ) == -1)
 				{
