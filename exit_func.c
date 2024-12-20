@@ -14,4 +14,10 @@ void	exit_func(char **args, char *user_input)
 		free(user_input);
 		exit(0);
 	}
+	if (strcmp(args[0], "env") == 0)
+	{
+		print_env();
+		free(args);
+		free(user_input);
+	}
 }
