@@ -25,6 +25,6 @@ char	**tokenize(char *user_input)
 		args[i++] = token;
 		token = strtok(NULL, " ");
 	}
-	args[i] = '\0';
+	args[i] = NULL;
 	return (args);
 }
