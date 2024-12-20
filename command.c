@@ -17,8 +17,6 @@ void	command(char **args, char *user_input)
 	if (strcmp(args[0], "env") == 0)
 	{
 		print_env();
-		free(args);
-		free(user_input);
 	}
 	if (strcmp(args[0], "test") == 0)
 	{
