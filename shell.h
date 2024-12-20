@@ -10,11 +10,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern char **environ;
 void print_prompt(void);
 char **tokenize(char *user_input);
 char *read_line(void);
-int exec_cmd(char **cmd, char **env);
-extern char **environ;
-void exit_func(char **args, char *user_input);
+void command(char **args, char *user_input);
 void print_env(void);
+
 #endif
