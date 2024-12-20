@@ -16,6 +16,5 @@ char *read_line(void);
 int exec_cmd(char **cmd, char **env);
 extern char **environ;
 void exit_func(char **args, char *user_input);
-extern char **environ;
-
+void print_env(void);
 #endif
