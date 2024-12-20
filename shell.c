@@ -1,60 +1,47 @@
 #include "shell.h"
-#include <sys/wait.h>
+
 /**
- * read_line - read a line from stdin
+ * main - entry point
  *
- * Return: pointer that points to a str with the line content
+ * Return: 0 on success, 1 on failure
  */
-int main(void)
+
+int	main(void)
 {
-	char *line = NULL;
-	size_t bufsize = 0;
-	pid_t pid;
-	int status;
 	char **args = NULL;
+	char *user_input = NULL;
+	pid_t pid;
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO) == 1)
+		print_prompt();
+		user_input = read_line();
+		args = tokenize(user_input);
+		if (args[0] != NULL)
 		{
-			printf("($) ");
-			fflush(stdin);
-		}
-		else if (getline(&line, &bufsize, stdin) == -1)
-		{
-			if (feof(stdin))
+			pid = fork();
+			if (pid == -1)
 			{
-				free(line);
-				exit(EXIT_SUCCESS);
+				perror("fork error");
+				exit(EXIT_FAILURE);
+			}
+			if (pid == 0)
+			{
+				if (execvp(args[0], args) == -1)
+				{
+					fprintf(stderr, "./hsh: command not found: %s\n", args[0]);
+					exit(EXIT_FAILURE);
+				}
 			}
 			else
 			{
-				free(line);
-				perror("error while reading the line from stdin");
-				exit(EXIT_FAILURE);
+				int status;
+
+				waitpid(pid, &status, 0);
 			}
 		}
+		free(args);
 	}
-	pid = fork();
-	if (pid ==  0)
-	{
-	if (execvp(args[0], args) == -1)
-	{
-		perror("error in new_process: child process");
-	}
-	exit(EXIT_FAILURE);
-	}
-	else if (pid < 0)
-	{
-		perror("error in new_process: forking");
-	}
-	else
-	{
-		do 
-		{
-			waitpid(pid, &status, WUNTRACED);
-		}
-		while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
-	return (line);
+	free(user_input);
+	return (0);
 }
