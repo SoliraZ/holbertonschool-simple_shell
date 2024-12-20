@@ -1,12 +1,11 @@
 #include "shell.h"
 
 /**
- * main - entry point
+ * main - Entry point for the shell program.
  *
- * Return: 0 on success, 1 on failure
+ * Return: Always 0.
  */
-
-int	main(void)
+int main(void)
 {
 	char **args = NULL;
 	char *user_input = NULL;
@@ -18,7 +17,8 @@ int	main(void)
 		user_input = read_line();
 		args = tokenize(user_input);
 		exit_func(args, user_input);
-		if (args[0] != NULL)
+
+		if (args[0] != NULL && strcmp(args[0], "env") != 0)
 		{
 			pid = fork();
 			if (pid == -1)
@@ -28,7 +28,7 @@ int	main(void)
 			}
 			if (pid == 0)
 			{
-				if (execvp(args[0], args) == -1)
+				if (execve(args[0], args, environ) == -1)
 				{
 					fprintf(stderr, "./hsh: command not found: %s\n", args[0]);
 					exit(EXIT_FAILURE);

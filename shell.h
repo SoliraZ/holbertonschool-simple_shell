@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern char **environ;
 void print_prompt(void);
 char **tokenize(char *user_input);
 char *read_line(void);
