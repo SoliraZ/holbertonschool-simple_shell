@@ -16,8 +16,8 @@ int main(void)
 		print_prompt();
 		user_input = read_line();
 		args = tokenize(user_input);
-		if (args[0] != NULL && (strcmp(args[0], "exit") == 0
-					|| strcmp(args[0], "env") == 0 || strcmp(args[0], "test") == 0))
+		if (strcmp(args[0], "exit") == 0
+				|| strcmp(args[0], "env") == 0 || strcmp(args[0], "test") == 0)
 			command(args, user_input);
 		else
 		{
@@ -31,10 +31,11 @@ int main(void)
 			{
 				if (execve(args[0], args, environ) == -1)
 				{
-					fprintf(stderr, "%s: command not found: %s\n", args[0], args[0]);
+					fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
 					exit(EXIT_FAILURE);
 				}
-			} else
+			}
+			else
 			{
 				int status;
 
