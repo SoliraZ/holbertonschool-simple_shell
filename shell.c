@@ -1,5 +1,4 @@
 #include "shell.h"
-<<<<<<< HEAD
 
 /**
  * main - Entry point for the shell program.
@@ -139,5 +138,5 @@ int main(void)
 		while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 	return (line);
->>>>>>> bdc06814e620f2406c24cd4f24527390f35152be
+
 }
