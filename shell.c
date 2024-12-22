@@ -9,6 +9,7 @@ int main(void)
 {
 	char **args = NULL;
 	char *user_input = NULL;
+	char *command_path == NULL;
 	pid_t pid;
 
 	while (1)
@@ -19,6 +20,7 @@ int main(void)
 		if (strcmp(args[0], "exit") == 0
 				|| strcmp(args[0], "env") == 0 || strcmp(args[0], "test") == 0)
 			command(args, user_input);
+
 		else
 		{
 			pid = fork();
@@ -41,6 +43,35 @@ int main(void)
 
 				waitpid(pid, &status, 0);
 			}
+		}
+		else
+		{
+			char *path = find_path(args[0]);
+
+			if (path)
+			{
+				perror("fork error");
+				exit(EXIT_FAILURE);
+			}
+			else if (pid == 0)
+			{
+				if (execve(path, args, environ) == -1)
+				{
+					fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+					exit(EXIT_FAILURE);
+				}
+			}
+			else
+			{
+				int status;
+
+				waitpid(pid, &status, 0);
+			}
+			free(path);
+		}
+		else
+		{
+			fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
 		}
 		free(args);
 	}
