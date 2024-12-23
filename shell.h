@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <signal.h>
 
 extern char **environ;
 void print_prompt(void);

@@ -71,7 +71,7 @@ void execute_command(char **args)
 	}
 	else if (pid == 0)
 	{
-		if (execve(path, args, NULL) == -1)
+		if (execve(path, args, environ) == -1)
 		{
 			perror("./hsh not found\n");
 			exit(EXIT_FAILURE);
@@ -104,6 +104,16 @@ void handle_builtin_commands(char **args, char *user_input)
 		execute_command(args);
 	}
 }
+/**
+ * handle_signint - Handle signal interrupt
+ * @signint: Signal interrupt
+ */
+
+void handle_signint(int signint)
+{
+	(void)signint;
+	write(STDOUT_FILENO, "\n$ ", 3);
+}
 
 /**
  * main - Simple Shell
@@ -116,6 +126,7 @@ int main(void)
 	char **args = NULL;
 	char *user_input = NULL;
 
+	signal(SIGINT, handle_signint);
 	while (1)
 	{
 		print_prompt();
@@ -132,3 +143,4 @@ int main(void)
 	}
 	return (0);
 }
+
