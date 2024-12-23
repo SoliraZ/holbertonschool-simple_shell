@@ -8,17 +8,17 @@
 
 void	command(char **args, char *user_input)
 {
-	if (strcmp(args[0], "exit") == 0)
+	if (strncmp(args[0], "exit", 4) == 0)
 	{
 		free(args);
 		free(user_input);
 		exit(0);
 	}
-	if (strcmp(args[0], "env") == 0)
+	if (strncmp(args[0], "env", 3) == 0)
 	{
 		print_env();
 	}
-	if (strcmp(args[0], "test") == 0)
+	if (strncmp(args[0], "test", 4) == 0)
 	{
 		printf("test\n");
 	}

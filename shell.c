@@ -74,8 +74,8 @@ void execute_command(char **args)
 
 void handle_builtin_commands(char **args, char *user_input)
 {
-	if (strcmp(args[0], "exit") == 0
-			|| strcmp(args[0], "env") == 0 || strcmp(args[0], "test") == 0)
+	if (strncmp(args[0], "exit", 4) == 0
+			|| strncmp(args[0], "env", 3) == 0 || strncmp(args[0], "test", 4) == 0)
 	{
 		command(args, user_input);
 	}
