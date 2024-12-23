@@ -22,16 +22,8 @@ char	*read_line(void)
 	}
 	if (res_getline == -1)
 	{
-		if (feof(stdin))
-		{
-			free(user_input);
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			perror("getline error");
-			exit(EXIT_FAILURE);
-		}
+		perror("getline error");
+		exit(EXIT_FAILURE);
 	}
 	user_input[strcspn(user_input, "\n")] = '\0';
 	return (user_input);
