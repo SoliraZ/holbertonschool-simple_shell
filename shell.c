@@ -59,7 +59,7 @@ void execute_command(char **args)
 
 	if (path == NULL)
 	{
-		fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+		fprintf(stderr, "./hsh: %s: not found\n", args[0]);
 		return;
 	}
 
@@ -71,9 +71,9 @@ void execute_command(char **args)
 	}
 	else if (pid == 0)
 	{
-		if (execve(path, args, environ) == -1)
+		if (execve(path, args, NULL) == -1)
 		{
-			fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+			perror("./hsh not found\n");
 			exit(EXIT_FAILURE);
 		}
 	}
