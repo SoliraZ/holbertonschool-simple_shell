@@ -1,49 +1,114 @@
 #include "shell.h"
 
 /**
- * main - Entry point for the shell program.
+ * find_command_path - Find command path
+ * @command: Command
  *
- * Return: Always 0.
+ * Return: Command path
  */
+
+char *find_command_path(char *command)
+{
+	char *path_env = getenv("PATH");
+	char *path = strdup(path_env);
+	char *token = strtok(path, ":");
+	char full_path[1024];
+
+	while (token != NULL)
+	{
+		sprintf(full_path, "%s/%s", token, command);
+		if (access(full_path, X_OK) == 0)
+		{
+			free(path);
+			return (strdup(full_path));
+		}
+		token = strtok(NULL, ":");
+	}
+	free(path);
+	return (NULL);
+}
+/**
+ * execute_command - Execute command
+ * @args: Array of arguments
+ */
+
+void execute_command(char **args)
+{
+	pid_t pid;
+	char *path = find_command_path(args[0]);
+
+	if (path == NULL)
+	{
+		fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+		return;
+	}
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork error");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		if (execve(path, args, environ) == -1)
+		{
+			fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		int status;
+
+		waitpid(pid, &status, 0);
+	}
+	free(path);
+}
+
+/**
+ * handle_builtin_commands - Handle built-in commands
+ * @args: Array of arguments
+ * @user_input: User input
+ */
+
+void handle_builtin_commands(char **args, char *user_input)
+{
+	if (strcmp(args[0], "exit") == 0
+			|| strcmp(args[0], "env") == 0 || strcmp(args[0], "test") == 0)
+	{
+		command(args, user_input);
+	}
+	else
+	{
+		execute_command(args);
+	}
+}
+
+/**
+ * main - Simple Shell
+ *
+ * Return: Always 0
+ */
+
 int main(void)
 {
 	char **args = NULL;
 	char *user_input = NULL;
-	pid_t pid;
 
 	while (1)
 	{
 		print_prompt();
 		user_input = read_line();
-		args = tokenize(user_input);
-		if (strcmp(args[0], "exit") == 0
-				|| strcmp(args[0], "env") == 0 || strcmp(args[0], "test") == 0)
-			command(args, user_input);
-		else
+		if (user_input[0] == '\0')
 		{
-			pid = fork();
-			if (pid == -1)
-			{
-				perror("fork error");
-				exit(EXIT_FAILURE);
-			}
-			else if (pid == 0)
-			{
-				if (execve(args[0], args, environ) == -1)
-				{
-					fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
-					exit(EXIT_FAILURE);
-				}
-			}
-			else
-			{
-				int status;
-
-				waitpid(pid, &status, 0);
-			}
+			free(user_input);
+			continue;
 		}
+		args = tokenize(user_input);
+		handle_builtin_commands(args, user_input);
 		free(args);
+		free(user_input);
 	}
-	free(user_input);
 	return (0);
 }

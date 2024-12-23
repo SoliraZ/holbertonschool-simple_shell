@@ -9,6 +9,6 @@ void	print_prompt(void)
 	if (isatty(STDIN_FILENO) == 1)
 	{
 		printf("$ ");
-		fflush(stdout);
+		fflush(stdin);
 	}
 }
