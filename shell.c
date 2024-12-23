@@ -9,10 +9,28 @@
 
 char *find_command_path(char *command)
 {
-	char *path_env = getenv("PATH");
-	char *path = strdup(path_env);
-	char *token = strtok(path, ":");
+	char *path_env;
+	char *path;
+	char *token;
 	char full_path[1024];
+
+	if (command[0] == '/')
+	{
+		if (access(command, X_OK) == 0)
+		{
+			return (strdup(command));
+		}
+		return (NULL);
+	}
+
+	path_env = getenv("PATH");
+	if (!path_env)
+	{
+		return (NULL);
+	}
+
+	path = strdup(path_env);
+	token = strtok(path, ":");
 
 	while (token != NULL)
 	{
@@ -24,9 +42,11 @@ char *find_command_path(char *command)
 		}
 		token = strtok(NULL, ":");
 	}
+
 	free(path);
 	return (NULL);
 }
+
 /**
  * execute_command - Execute command
  * @args: Array of arguments
