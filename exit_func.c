@@ -13,7 +13,7 @@
  */
 void exit_func(char **args, char *user_input)
 {
-	if (args[0] && strcmp(args[0], "exit") == 0)
+	if (args && args[0] && strcmp(args[0], "exit") == 0)
 	{
 		free(args);
 		free(user_input);
@@ -30,45 +30,57 @@ int main(void)
 {
 	char **args = NULL;
 	char *user_input = NULL;
-	pid_t pid;
 
 	while (1)
 	{
+		pid_t pid;
+
 		print_prompt();
+
 		user_input = read_line();
-		args = tokenize(user_input);
-
-		exit_func(args, user_input);
-
-		if (args[0] != NULL)
+		if (!user_input)
 		{
-			pid = fork();
-			if (pid == -1)
-			{
-				perror("fork error");
-				free(args);
-				free(user_input);
-				exit(EXIT_FAILURE);
-			}
-			if (pid == 0)
-			{
-				if (execvp(args[0], args) == -1)
-				{
-					fprintf(stderr, "./hsh: command not found: %s\n", args[0]);
-					free(args);
-					free(user_input);
-					exit(EXIT_FAILURE);
-				}
-			}
-			else
-			{
-				int status;
-
-				waitpid(pid, &status, 0);
-			}
+			perror("read_line");
+			continue;
 		}
+
+		args = tokenize(user_input);
+		if (!args || !args[0])
+		{
+			free(user_input);
+			free(args);
+			continue;
+		}
+	exit_func(args, user_input);
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
 		free(args);
+		free(user_input);
+		continue;
+	}
+
+	if (pid == 0)
+	{
+		if (execve(args[0], args, environ) == -1)
+		{
+			fprintf(stderr, "./hsh: command not found: %s\n", args[0]);
+			free(args);
+			free(user_input);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		int status;
+
+		waitpid(pid, &status, 0);
 	}
 	free(user_input);
+	free(args);
+	}
+
 	return (0);
 }
