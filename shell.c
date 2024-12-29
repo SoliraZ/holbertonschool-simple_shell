@@ -96,13 +96,13 @@ void handle_builtin_commands(char **args, char *user_input)
 {
 	if (args[0] != NULL)
 	{
-		if (strcmp(args[0], "exit") == 0)
+		if (strncmp(args[0], "exit", 4) == 0)
 		{
 			free_args(args);
 			free(user_input);
 			exit(0);
 		}
-		else if (strcmp(args[0], "env") == 0)
+		else if (strncmp(args[0], "env", 3) == 0)
 		{
 			print_env();
 		}
