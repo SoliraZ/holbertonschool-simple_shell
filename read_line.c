@@ -13,17 +13,20 @@ char	*read_line(void)
 	int res_getline, i;
 
 	res_getline = getline(&user_input, &size_alloc, stdin);
-	if (res_getline == EOF)
-	{
-		free(user_input);
-		if (isatty(STDIN_FILENO))
-			putchar('\n');
-		exit(EXIT_SUCCESS);
-	}
 	if (res_getline == -1)
 	{
-		perror("getline error");
-		exit(EXIT_FAILURE);
+		if (feof(stdin))
+		{
+			free(user_input);
+			if (isatty(STDIN_FILENO))
+				putchar('\n');
+			exit(EXIT_SUCCESS);
+		}
+		else
+		{
+			perror("getline error");
+			exit(EXIT_FAILURE);
+		}
 	}
 	i = 0;
 	while (user_input[i] != '\0')

@@ -18,8 +18,4 @@ void	command(char **args, char *user_input)
 	{
 		print_env();
 	}
-	if (strncmp(args[0], "test", 4) == 0)
-	{
-		printf("test\n");
-	}
 }
