@@ -15,7 +15,6 @@ extern char **environ;
 void print_prompt(void);
 char **tokenize(char *user_input);
 char *read_line(void);
-void command(char **args, char *user_input);
 void print_env(void);
 void free_args(char **args);
 
