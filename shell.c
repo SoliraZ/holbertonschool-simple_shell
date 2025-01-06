@@ -22,8 +22,7 @@ char *find_command_path(char *command)
 		}
 		return (NULL);
 	}
-
-	path_env = getenv("PATH");
+	path_env = _getenv("PATH");
 	if (!path_env)
 	{
 		return (NULL);
@@ -42,7 +41,6 @@ char *find_command_path(char *command)
 		}
 		token = strtok(NULL, ":");
 	}
-
 	free(path);
 	return (NULL);
 }
