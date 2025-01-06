@@ -94,16 +94,31 @@ void execute_command(char **args)
 
 void handle_builtin_commands(char **args, char *user_input)
 {
-	if (strncmp(args[0], "exit", 4) == 0
-			|| strncmp(args[0], "env", 3) == 0 || strncmp(args[0], "test", 4) == 0)
+	if (args[0] != NULL)
 	{
-		command(args, user_input);
-	}
-	else
-	{
-		execute_command(args);
+		if (strncmp(args[0], "exit", 4) == 0)
+		{
+			int status = 0;
+
+			if (args[1] != NULL)
+			{
+				status = atoi(args[1]);
+			}
+			free_args(args);
+			free(user_input);
+			exit(status);
+		}
+		else if (strncmp(args[0], "env", 3) == 0)
+		{
+			print_env();
+		}
+		else
+		{
+			execute_command(args);
+		}
 	}
 }
+
 /**
  * handle_signint - Handle signal interrupt
  * @signint: Signal interrupt
@@ -132,14 +147,9 @@ int main(void)
 	{
 		print_prompt();
 		user_input = read_line();
-		if (user_input[0] == '\0')
-		{
-			free(user_input);
-			continue;
-		}
 		args = tokenize(user_input);
 		handle_builtin_commands(args, user_input);
-		free(args);
+		free_args(args);
 		free(user_input);
 	}
 	return (0);
