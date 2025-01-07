@@ -71,7 +71,7 @@ void execute_command(char **args)
 	{
 		if (execve(path, args, environ) == -1)
 		{
-			perror("./hsh not found\n");
+			perror("./hsh not found");
 			exit(EXIT_FAILURE);
 		}
 	}
