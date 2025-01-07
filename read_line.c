@@ -26,14 +26,8 @@ char	*read_line(void)
 		exit(EXIT_FAILURE);
 	}
 	i = 0;
-	while (user_input[i] != '\0')
-	{
-		if (user_input[i] == '\n')
-		{
-			user_input[i] = '\0';
-			break;
-		}
-		i++;
-	}
+	size_t len = strlen(user_input);
+	if (len > 0 && user_input[len - 1] == '\n')
+		user_input[len - 1] = '\0';
 	return (user_input);
 }
