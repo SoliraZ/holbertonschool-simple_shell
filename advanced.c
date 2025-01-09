@@ -4,8 +4,9 @@
  * cd_command - Change directory
  * @args: Array of arguments
  *
- * Return: 1 on success, 0 on failure
+ * Return: 0 on success, 1 on failure
  */
+
 int cd_command(char **args)
 {
 	char *dir, cwd[1024];
@@ -16,7 +17,7 @@ int cd_command(char **args)
 		if (dir == NULL)
 		{
 			fprintf(stderr, "cd: No home directory.\n");
-			return (0);
+			return (1);
 		}
 	}
 	else if (strcmp(args[1], "-") == 0)
@@ -25,7 +26,7 @@ int cd_command(char **args)
 		if (dir == NULL)
 		{
 			fprintf(stderr, "cd: OLDPWD not set.\n");
-			return (0);
+			return (1);
 		}
 		printf("%s\n", dir);
 	}
@@ -34,14 +35,14 @@ int cd_command(char **args)
 	if (chdir(dir) != 0)
 	{
 		perror("cd");
-		return (0);
+		return (1);
 	}
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		setenv("PWD", cwd, 1);
 	else
 	{
 		perror("getcwd");
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }
