@@ -117,7 +117,14 @@ void handle_builtin_commands(char **args, char *user_input)
 		}
 		else
 		{
-			execute_command(args);
+			if (strncmp(args[0], "cd", 2) == 0)
+			{
+				cd_command(args);
+			}
+			else
+			{
+				execute_command(args);
+			}
 		}
 	}
 }

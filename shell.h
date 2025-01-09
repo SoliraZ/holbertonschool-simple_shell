@@ -18,5 +18,6 @@ char *read_line(void);
 void print_env(void);
 void free_args(char **args);
 char *_getenv(const char *name);
+int cd_command(char **args);
 
 #endif
