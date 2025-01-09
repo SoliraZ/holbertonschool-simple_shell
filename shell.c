@@ -12,15 +12,20 @@ char *find_command_path(char *command)
 	char *path_env;
 	char *path;
 	char *token;
+	int i = 0;
 	char full_path[1024];
 
-	if (command[0] == '/')
+	while (command[i] != '\0')
 	{
-		if (access(command, X_OK) == 0)
+		if (command[i] == '/')
 		{
-			return (strdup(command));
+			if (access(command, X_OK) == 0)
+			{
+				return (strdup(command));
+			}
+			return (NULL);
 		}
-		return (NULL);
+		i++;
 	}
 	path_env = _getenv("PATH");
 	if (!path_env)
@@ -130,8 +135,8 @@ void handle_signint(int signint)
 
 /**
  * main - main
-* Handle the PATH
-fork must not be called if the command doesn’t exist * main - Simple Shell
+ * Handle the PATH
+ fork must not be called if the command doesn’t exist * main - Simple Shell
  *
  * Return: Always 0
  */
