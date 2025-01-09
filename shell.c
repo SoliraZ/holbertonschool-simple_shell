@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <errno.h>
 
 /**
  * find_command_path - Find command path
@@ -101,11 +102,15 @@ void handle_builtin_commands(char **args, char *user_input)
 	{
 		if (strncmp(args[0], "exit", 4) == 0)
 		{
-			int status = 2;
+			int status = 0;
 
 			if (args[1] != NULL)
 			{
 				status = atoi(args[1]);
+			}
+			else if (errno != 0)
+			{
+				status = 2;
 			}
 			free_args(args);
 			free(user_input);
