@@ -69,6 +69,7 @@ void execute_command(char **args)
 	pid = fork();
 	if (pid == -1)
 	{
+		fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
 		perror("fork error");
 		exit(EXIT_FAILURE);
 	}
