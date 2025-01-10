@@ -1,5 +1,7 @@
 #include "shell.h"
 
+int exit_status;
+
 /**
  * find_command_path - Find command path
  * @command: Command
@@ -63,6 +65,7 @@ void execute_command(char **args)
 	if (path == NULL)
 	{
 		fprintf(stderr, "./hsh: %s: not found\n", args[0]);
+		exit_status = 127;
 		return;
 	}
 
@@ -85,6 +88,10 @@ void execute_command(char **args)
 		int status;
 
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+		{
+			exit_status = WEXITSTATUS(status);
+		}
 	}
 	free(path);
 }
