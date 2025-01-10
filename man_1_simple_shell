@@ -1,0 +1,35 @@
+.TH HOLBERTON_SIMPLE_SHELL 1 "January 2025" "1.0" "Holberton Simple Shell Manual"
+.SH NAME
+holberton_simple_shell \- a simple UNIX command interpreter
+.SH SYNOPSIS
+[\fIcommand\fR [\fIarguments...\fR]]
+.SH DESCRIPTION
+.B holberton_simple_shell
+is a simple UNIX command interpreter that reads commands from a file or standard input and executes them.
+.SH OPTIONS
+.TP
+\fBcommand\fR
+The command to execute.
+.TP
+\fBarguments\fR
+The arguments to pass to the command.
+.SH EXAMPLES
+- \fBls\fP: list the contents of the current directory.
+.br
+.br
+- \fBpwd\fP: print the path of the current working directory.
+.br
+.br
+- \fBmkdir \(dqdirectory_name\(dq\fP: create a new directory.
+.br
+.br
+- \fBenv\fP: print the environment.
+.br
+.br
+- \fBexit\fP: exit the shell.
+.SH AUTHORS
+Developed by \fBHamza\fP, \fBMyriam\fP and \fBBadr\fP.
+.SH BUGS
+Work in progress. Potential bugs, feedback encouraged.
+.SH COPYRIGHT
+This is free software, see the source for copying conditions. There is NO warranty, not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
