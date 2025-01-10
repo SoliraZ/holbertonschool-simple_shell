@@ -53,25 +53,25 @@ char *find_command_path(char *command)
 /**
  * execute_command - Execute command
  * @args: Array of arguments
+ * @command_count: Command count
  */
 
-void execute_command(char **args)
+void execute_command(char **args, int *command_count)
 {
 	pid_t pid;
 	char *path = find_command_path(args[0]);
-	static int command_count;
 
-	command_count++;
+	(*command_count)++;
 	if (path == NULL)
 	{
-		fprintf(stderr, "./hsh: %d: %s: not found\n", command_count, args[0]);
+		fprintf(stderr, "./hsh: %d: %s: not found\n", *command_count, args[0]);
 		return;
 	}
 
 	pid = fork();
 	if (pid == -1)
 	{
-		fprintf(stderr, "./hsh: %d: %s: not found\n", command_count, args[0]);
+		fprintf(stderr, "./hsh: %d: %s: not found\n", *command_count, args[0]);
 		perror("fork error");
 		exit(EXIT_FAILURE);
 	}
@@ -95,10 +95,11 @@ void execute_command(char **args)
 /**
  * handle_builtin_commands - Handle built-in commands
  * @args: Array of arguments
+ * @command_count: Command count
  * @user_input: User input
  */
 
-void handle_builtin_commands(char **args, char *user_input)
+void handle_builtin_commands(char **args, int *command_count, char *user_input)
 {
 	if (args[0] != NULL)
 	{
@@ -117,16 +118,18 @@ void handle_builtin_commands(char **args, char *user_input)
 		else if (strncmp(args[0], "env", 3) == 0)
 		{
 			print_env();
+			(*command_count)++;
 		}
 		else
 		{
 			if (strncmp(args[0], "cd", 2) == 0)
 			{
 				cd_command(args);
+				(*command_count)++;
 			}
 			else
 			{
-				execute_command(args);
+				execute_command(args, command_count);
 			}
 		}
 	}
@@ -153,6 +156,7 @@ int main(void)
 {
 	char **args = NULL;
 	char *user_input = NULL;
+	int command_count = 0;
 
 	signal(SIGINT, handle_signint);
 	while (1)
@@ -160,7 +164,7 @@ int main(void)
 		print_prompt();
 		user_input = read_line();
 		args = tokenize(user_input);
-		handle_builtin_commands(args, user_input);
+		handle_builtin_commands(args, &command_count, user_input);
 		free_args(args);
 		free(user_input);
 	}
