@@ -59,17 +59,19 @@ void execute_command(char **args)
 {
 	pid_t pid;
 	char *path = find_command_path(args[0]);
+	static int command_count;
 
+	command_count++;
 	if (path == NULL)
 	{
-		fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+		fprintf(stderr, "./hsh: %d: %s: not found\n", command_count, args[0]);
 		return;
 	}
 
 	pid = fork();
 	if (pid == -1)
 	{
-		fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+		fprintf(stderr, "./hsh: %d: %s: not found\n", command_count, args[0]);
 		perror("fork error");
 		exit(EXIT_FAILURE);
 	}
