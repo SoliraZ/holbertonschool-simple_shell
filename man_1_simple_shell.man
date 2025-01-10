@@ -1,0 +1,90 @@
+.\" Man page for simple_shell
+
+.TH SIMPLE_SHELL 1 "January 2025" "1.0" "simple_shell man page"
+.SH NAME
+.PP
+.B simple_shell
+\- a simple UNIX command line interpreter
+.SH SYNOPSIS
+.nf
+.B ##include <stdio.h>
+.B ##include <stdlib.h>
+.B ##include <unistd.h>
+.TP
+.B int main(void)
+.fi
+.SH DESCRIPTION
+.PP
+
+The program
+.B simple_shell
+is a minimal UNIX command line interpreter that waits for the user to type a command, 
+executes it, and then displays a prompt again. It supports simple commands with or without arguments.
+The shell operates in both interactive and non-interactive modes. If a command is not found, 
+an error message is displayed, and the prompt is shown again.
+
+.B simple_shell
+
+handles the "end of file" (Ctrl+D) condition by exiting gracefully.
+.LP
+
+The shell will continue to run until the user types the
+.B exit
+
+command or sends an interrupt signal (Ctrl+C).
+.SH OPTIONS
+
+No options are currently supported.
+.SH BUILT-IN COMMANDS
+.TP
+.B exit
+
+Exits the shell interpreter.
+.TP
+.B env
+
+Displays the current environment variables.
+.SH EXAMPLES
+.PP
+
+Example 1: Interactive mode
+.PP
+$ ./simple_shell
+($) /bin/ls
+file1  file2  file3
+($) ls
+file1  file2  file3
+($) exit
+$ 
+.PP
+
+Example 2: Non-interactive mode
+.PP
+$ echo "/bin/ls" | ./simple_shell
+file1  file2  file3
+$ 
+
+.SH ERROR HANDLING
+.PP
+
+If a command cannot be found, the program displays an error message in the following format:
+
+.PP
+./simple_shell: 1: command: not found
+.SH NOTES
+.PP
+
+This shell implementation does not support advanced shell features such as pipes, redirections, or background processes.
+The shell simply executes commands without any arguments and prints the output to standard output.
+.PP
+
+Ensure the PATH environment variable is set correctly to allow command execution from various directories.
+
+.SH AUTHOR
+.PP
+This simple shell was created by [Amza, Badr Myriam].
+
+.SH COPYRIGHT
+.PP
+No copyright. This is free and unencumbered software released into the public domain.
+
