@@ -33,12 +33,12 @@ Clone the repository from GitHub:
 
 Navigate to the project directory:
 ```bash
-  cd simple_shell
+  cd holbertonschool-simple_shell
 ```
 
 Compile the project with gcc:
 ```bash
- gcc -o shell shell.c
+ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 ```
 
 
@@ -46,7 +46,7 @@ Compile the project with gcc:
 
 1- Run the shell with the following command:
 ```bash
-./shell
+./hsh
 ```
 
 2- Once the shell is running, it will prompt you for input. For example
@@ -58,7 +58,7 @@ file1.txt  file2.txt  file3.txt
 
 4- If the command is not found, it will show an error message:
 ```bash
-./shell: No such file or directory
+./hsh: command: not found
 ```
 
 5- To exit the shell, type exit:
