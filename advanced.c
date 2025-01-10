@@ -20,18 +20,7 @@ int cd_command(char **args)
 			return (1);
 		}
 	}
-	else if (strcmp(args[1], "-") == 0)
-	{
-		dir = _getenv("OLDPWD");
-		if (dir == NULL)
-		{
-			fprintf(stderr, "cd: OLDPWD not set.\n");
-			return (1);
-		}
-		printf("%s\n", dir);
-	}
-	else
-		dir = args[1];
+	dir = args[1];
 	if (chdir(dir) != 0)
 	{
 		perror("cd");
