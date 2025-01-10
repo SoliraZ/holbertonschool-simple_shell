@@ -2,8 +2,9 @@
 
 .TH SIMPLE_SHELL 1 "January 2025" "1.0" "simple_shell man page"
 .SH NAME
+ holberton_simple_shell \- a simple UNIX command interpreter
 .PP
-.B simple_shell
+.B holberton_simple_shell
 \- a simple UNIX command line interpreter
 .SH SYNOPSIS
 .nf
