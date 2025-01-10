@@ -9,10 +9,32 @@
 
 char *find_command_path(char *command)
 {
-	char *path_env = getenv("PATH");
-	char *path = strdup(path_env);
-	char *token = strtok(path, ":");
+	char *path_env;
+	char *path;
+	char *token;
+	int i = 0;
 	char full_path[1024];
+
+	while (command[i] != '\0')
+	{
+		if (command[i] == '/')
+		{
+			if (access(command, X_OK) == 0)
+			{
+				return (strdup(command));
+			}
+			return (NULL);
+		}
+		i++;
+	}
+	path_env = _getenv("PATH");
+	if (!path_env)
+	{
+		return (NULL);
+	}
+
+	path = strdup(path_env);
+	token = strtok(path, ":");
 
 	while (token != NULL)
 	{
@@ -27,6 +49,7 @@ char *find_command_path(char *command)
 	free(path);
 	return (NULL);
 }
+
 /**
  * execute_command - Execute command
  * @args: Array of arguments
@@ -39,7 +62,7 @@ void execute_command(char **args)
 
 	if (path == NULL)
 	{
-		fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+		fprintf(stderr, "./hsh: %s: not found\n", args[0]);
 		return;
 	}
 
@@ -53,7 +76,7 @@ void execute_command(char **args)
 	{
 		if (execve(path, args, environ) == -1)
 		{
-			fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+			perror("./hsh not found");
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -74,19 +97,53 @@ void execute_command(char **args)
 
 void handle_builtin_commands(char **args, char *user_input)
 {
-	if (strcmp(args[0], "exit") == 0
-			|| strcmp(args[0], "env") == 0 || strcmp(args[0], "test") == 0)
+	if (args[0] != NULL)
 	{
-		command(args, user_input);
-	}
-	else
-	{
-		execute_command(args);
+		if (strncmp(args[0], "exit", 4) == 0)
+		{
+			int status = 0;
+
+			if (args[1] != NULL)
+			{
+				status = atoi(args[1]);
+			}
+			free_args(args);
+			free(user_input);
+			exit(status);
+		}
+		else if (strncmp(args[0], "env", 3) == 0)
+		{
+			print_env();
+		}
+		else
+		{
+			if (strncmp(args[0], "cd", 2) == 0)
+			{
+				cd_command(args);
+			}
+			else
+			{
+				execute_command(args);
+			}
+		}
 	}
 }
 
 /**
- * main - Simple Shell
+ * handle_signint - Handle signal interrupt
+ * @signint: Signal interrupt
+ */
+
+void handle_signint(int signint)
+{
+	(void)signint;
+	write(STDOUT_FILENO, "\n$ ", 3);
+}
+
+/**
+ * main - main
+ * Handle the PATH
+ fork must not be called if the command doesn’t exist * main - Simple Shell
  *
  * Return: Always 0
  */
@@ -96,19 +153,16 @@ int main(void)
 	char **args = NULL;
 	char *user_input = NULL;
 
+	signal(SIGINT, handle_signint);
 	while (1)
 	{
 		print_prompt();
 		user_input = read_line();
-		if (user_input[0] == '\0')
-		{
-			free(user_input);
-			continue;
-		}
 		args = tokenize(user_input);
 		handle_builtin_commands(args, user_input);
-		free(args);
+		free_args(args);
 		free(user_input);
 	}
 	return (0);
 }
+

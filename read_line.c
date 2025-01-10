@@ -10,7 +10,7 @@ char	*read_line(void)
 {
 	char *user_input = NULL;
 	size_t size_alloc = 0;
-	int res_getline;
+	int res_getline, i;
 
 	res_getline = getline(&user_input, &size_alloc, stdin);
 	if (res_getline == EOF)
@@ -22,17 +22,18 @@ char	*read_line(void)
 	}
 	if (res_getline == -1)
 	{
-		if (feof(stdin))
-		{
-			free(user_input);
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			perror("getline error");
-			exit(EXIT_FAILURE);
-		}
+		perror("getline error");
+		exit(EXIT_FAILURE);
 	}
-	user_input[strcspn(user_input, "\n")] = '\0';
+	i = 0;
+	while (user_input[i] != '\0')
+	{
+		if (user_input[i] == '\n')
+		{
+			user_input[i] = '\0';
+			break;
+		}
+		i++;
+	}
 	return (user_input);
 }
