@@ -1,9 +1,7 @@
 #include "shell.h"
 
 /**
- * print_env- entry point
- *
- * Return: 0 on success, 1 on failure
+ * print_env - print the environment
  */
 
 void print_env(void)
@@ -17,7 +15,7 @@ void print_env(void)
 	}
 }
 /**
- * _getenv - entry point
+ * _getenv - get the value of an environment variable
  * @name: name of the environment variable
  *
  * Return: 0 on success, 1 on failure

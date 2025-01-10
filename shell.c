@@ -148,9 +148,7 @@ void handle_signint(int signint)
 }
 
 /**
- * main - main
- * Handle the PATH
- fork must not be called if the command doesn’t exist * main - Simple Shell
+ * main - simple shell
  *
  * Return: Always 0
  */
