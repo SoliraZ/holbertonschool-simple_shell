@@ -58,7 +58,7 @@ file1.txt  file2.txt  file3.txt
 
 4- If the command is not found, it will show an error message:
 ```bash
-./hsh: command: not found
+./hsh: 1: command: not found
 ```
 
 5- To exit the shell, type exit:
