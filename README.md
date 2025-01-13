@@ -13,6 +13,18 @@ Simple Shell is a project that implements a basic UNIX shell in C. This shell al
 - gcc for compiling C code.
 - The shell uses the execve system call to execute external commands.
 
+## Files
+
+- `advanced.c`: Files with all the advanced task functions.
+- `env.c`: Files with all environnement function.
+- `print_prompt.c` : File with the function that print the prompt.
+- `read_line.c` : File with the function that read the line of the user_input.
+- `tokenize.c` : File with the function that tokenize the user_input.
+- `shell.c` : File with the main function.
+- `shell.h` : Header file with all the prototypes of the functions.
+- `AUTHORS` : File with the authors of the project.
+- `man_1_simple_shell` : File of the man page of the shell.
+- `README.md` : File with the description of the project.
 
 ## Features
 
