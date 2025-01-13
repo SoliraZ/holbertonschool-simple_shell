@@ -79,6 +79,10 @@ $ exit
 ```
 6- If you press Ctrl+D, the shell will also terminate.
 
+## Man Page
+
+To access the man page, run the following command:
+```man ./man_1_simple_shell```
 
 ## Limitations
 
